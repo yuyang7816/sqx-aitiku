@@ -1,0 +1,28 @@
+package ${package.Parent}.domain.bo;
+
+import lombok.Data;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import javax.validation.constraints.NotNull;
+
+/**
+ * @author ${author}
+ * @since ${date}
+ */
+@Data
+public class ${entity}InfoBo {
+
+#foreach($field in ${table.fields})
+    #if(${field.keyFlag})
+        #set($keyPropertyName=${field.propertyName})
+    #end
+    #if(${field.keyFlag})
+    #if(${field.keyIdentityFlag})
+    @Schema(description = "${field.comment}")
+    @NotNull(message = "id不能为空")
+    #end
+    private ${field.propertyType} ${field.propertyName};
+    #end
+#end
+
+}

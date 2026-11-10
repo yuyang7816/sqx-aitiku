@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.app.base.dashboard.mapper.AdminDashboardMapper">
+
+    <select id="countAppUsers" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM tb_user
+    </select>
+
+    <select id="countTodayNewUsers" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM tb_user
+        WHERE DATE(create_time) = CURDATE()
+    </select>
+
+    <select id="countVipUsers" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM tb_user
+        WHERE is_vip = 1
+    </select>
+
+    <select id="countQuestions" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM tb_question WHERE state = 1
+    </select>
+
+    <select id="countPaperSets" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM tb_question_paper
+    </select>
+
+    <select id="countTodayPractice" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM tb_user_practice_record
+        WHERE DATE(submit_time) = CURDATE()
+    </select>
+
+    <select id="countPendingWithdraw" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM withdraw_record WHERE status = 1
+    </select>
+
+    <select id="countUnreadMessages" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM messages WHERE IFNULL(is_read, 0) = 0
+    </select>
+
+    <select id="sumWeekVipAmount" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(amount), 0) FROM tb_vip_order
+        WHERE pay_status = 1
+          AND pay_time >= DATE_SUB(CURDATE(), INTERVAL #{days} - 1 DAY)
+    </select>
+
+    <select id="selectUserComposition" resultType="com.sqx.app.base.dashboard.domain.vo.ChartItemVo">
+        SELECT 'VIP会员' AS name, COUNT(*) AS value FROM tb_user WHERE is_vip = 1
+        UNION ALL
+        SELECT '普通用户' AS name, COUNT(*) AS value FROM tb_user WHERE IFNULL(is_vip, 0) != 1
+    </select>
+
+    <select id="selectQuestionTypeDistribution" resultType="com.sqx.app.base.dashboard.domain.vo.ChartItemVo">
+        SELECT IFNULL(NULLIF(question_type, ''), '未知题型') AS name, COUNT(*) AS value
+        FROM tb_question
+        WHERE state = 1
+        GROUP BY IFNULL(NULLIF(question_type, ''), '未知题型')
+        ORDER BY value DESC
+    </select>
+
+    <select id="selectPracticeSourceDistribution" resultType="com.sqx.app.base.dashboard.domain.vo.ChartItemVo">
+        SELECT
+            CASE source_mode
+                WHEN 'all' THEN '章节练习'
+                WHEN 'wrong' THEN '错题重练'
+                WHEN 'single' THEN '单题练习'
+                ELSE IFNULL(source_mode, '其他')
+            END AS name,
+            COUNT(*) AS value
+        FROM tb_user_practice_record
+        GROUP BY source_mode
+        ORDER BY value DESC
+    </select>
+
+    <select id="selectUserRegisterTrend" resultType="com.sqx.app.base.dashboard.domain.vo.TrendItemVo">
+        SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS date, COUNT(*) AS count, NULL AS amount
+        FROM tb_user
+        WHERE create_time >= DATE_SUB(CURDATE(), INTERVAL #{days} - 1 DAY)
+        GROUP BY DATE(create_time)
+        ORDER BY date ASC
+    </select>
+
+    <select id="selectPracticeActiveTrend" resultType="com.sqx.app.base.dashboard.domain.vo.TrendItemVo">
+        SELECT DATE_FORMAT(submit_time, '%Y-%m-%d') AS date, COUNT(*) AS count, NULL AS amount
+        FROM tb_user_practice_record
+        WHERE submit_time >= DATE_SUB(CURDATE(), INTERVAL #{days} - 1 DAY)
+        GROUP BY DATE(submit_time)
+        ORDER BY date ASC
+    </select>
+
+    <select id="selectVipOrderTrend" resultType="com.sqx.app.base.dashboard.domain.vo.TrendItemVo">
+        SELECT DATE_FORMAT(pay_time, '%Y-%m-%d') AS date, COUNT(*) AS count, IFNULL(SUM(amount), 0) AS amount
+        FROM tb_vip_order
+        WHERE pay_status = 1
+          AND pay_time >= DATE_SUB(CURDATE(), INTERVAL #{days} - 1 DAY)
+        GROUP BY DATE(pay_time)
+        ORDER BY date ASC
+    </select>
+</mapper>

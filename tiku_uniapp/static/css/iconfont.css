@@ -1,0 +1,13 @@
+@font-face {
+	font-family: 'uicon-iconfont';
+	src: url('../fonts/uview-icon.ttf') format('truetype');
+	font-display: swap;
+}
+
+.u-icon__icon,
+.u-iconfont {
+	font-family: 'uicon-iconfont' !important;
+	font-style: normal;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+}

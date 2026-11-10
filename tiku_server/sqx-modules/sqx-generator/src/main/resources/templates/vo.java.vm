@@ -1,0 +1,15 @@
+package ${package.Parent}.domain.vo;
+
+import ${package.Entity}.${entity};
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+/**
+ * @author ${author}
+ * @since ${date}
+ */
+@EqualsAndHashCode(callSuper = true)
+@Data
+public class ${entity}Vo extends ${entity}{
+
+}

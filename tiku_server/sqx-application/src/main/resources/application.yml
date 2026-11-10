@@ -1,0 +1,137 @@
+# Tomcat
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    connection-timeout: 5000ms
+  port: 9165
+  servlet:
+    context-path: /sqx_fast
+
+spring:
+  application:
+    name: tiku
+  # 环境 dev|test|prod
+  profiles:
+    active: prod
+  # jackson时间格式化
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 10240MB
+      max-request-size: 10240MB
+      enabled: true
+  mvc:
+    throw-exception-if-no-handler-found: true
+#    pathmatch:
+#      matching-strategy: ant_path_matcher
+#  resources:
+#    add-mappings: false
+
+
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.sqx.modules.*.entity
+  global-config:
+    #数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID", ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: AUTO
+      logic-delete-value: -1
+      logic-not-delete-value: 0
+      insert-strategy: not_empty
+      update-strategy: not_empty
+      select-strategy: not_empty
+    banner: false
+  #原生配置
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 日志配置
+logging:
+  level:
+    com.sqx: info
+    org.springframework: warn
+    org.mybatis.spring.mapper: error
+  config: classpath:logback.xml
+redisson:
+  # 多项目共用 Redis 时按项目隔离 key，默认取 spring.application.name
+  key-prefix: "${spring.application.name}:"
+
+sqx:
+  redis:
+    open: false
+  file:
+    # 本地文件上传目录（需与 sys_config.file_local_upload_path 一致）
+    local-upload-path: /upload
+  shiro:
+    redis: false
+  # APP模块，是通过jwt认证的，如果要使用APP模块，则需要修改【加密秘钥】
+  jwt:
+    # 加密秘钥
+    secret: f4e2e52034348f86b67cde581c0f9eb5
+    # token有效时长，7天，单位秒
+    expire: 2592000
+    header: token
+
+# springdoc配置
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    url: /v3/api-docs
+    disable-swagger-default-url: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+  group-configs:
+    - group: 业务模块 - 管理端
+      paths-to-match:
+        - /admin/**
+      packages-to-scan:
+        - com.sqx.app
+    - group: 业务模块 - APP端
+      paths-to-match:
+        - /app/**
+      packages-to-scan:
+        - com.sqx.app
+    - group: 系统模块
+      packages-to-scan:
+        - com.sqx.system
+    - group: API
+      packages-to-scan:
+        - com.sqx
+  components:
+    security-schemes: # 鉴权方式配置
+      adminToken:
+        type: APIKEY
+        in: HEADER
+        name: ${sqx.jwt.header}
+        description: 管理端 Token，Header 名称见 sqx.jwt.header（默认 token）
+      appToken:
+        type: HTTP
+        scheme: bearer
+        bearerFormat: JWT
+        description: "APP 端 Token，请求头格式：Authorization: Bearer {token}；兼容 legacy 头 token: {token}"
+
+  # 自定义配置
+  info:
+    title: 手办商城系统接口文档 # 文档标题
+    description: 手办商城系统接口文档 # 文档描述
+    version: v1.0.0 # 文档版本
+    contact:
+      name: 西安省钱兄网络科技有限公司
+      url: https://www.xiansqx.com
+
+# Knife4j 配置
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN

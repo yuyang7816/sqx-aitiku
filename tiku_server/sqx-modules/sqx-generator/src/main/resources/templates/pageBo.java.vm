@@ -1,0 +1,15 @@
+package ${package.Parent}.domain.bo;
+
+import com.sqx.common.mybatis.domain.PageParam ;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+/**
+ * @author ${author}
+ * @since ${date}
+ */
+@EqualsAndHashCode(callSuper = true)
+@Data
+public class ${entity}PageBo extends PageParam {
+
+}

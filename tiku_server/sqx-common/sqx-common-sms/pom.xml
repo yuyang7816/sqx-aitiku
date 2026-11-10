@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.sqx</groupId>
+        <artifactId>sqx-common</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>sqx-common-sms</artifactId>
+
+    <properties>
+        <qcloudsms.version>1.0.6</qcloudsms.version>
+        <aliyun-ecs.version>5.1.2</aliyun-ecs.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sqx</groupId>
+            <artifactId>sqx-common-redis</artifactId>
+        </dependency>
+
+        <!--腾讯短信sdk-->
+        <dependency>
+            <groupId>com.github.qcloudsms</groupId>
+            <artifactId>qcloudsms</artifactId>
+            <version>${qcloudsms.version}</version>
+        </dependency>
+
+        <!--阿里云ECS V2.0 SDK -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>ecs20140526</artifactId>
+            <version>${aliyun-ecs.version}</version>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>com.sqx</groupId>
+        <artifactId>sqx-server</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>sqx-common</artifactId>
+
+    <modules>
+        <module>sqx-common-bom</module>
+        <module>sqx-common-core</module>
+        <module>sqx-common-redis</module>
+        <module>sqx-common-sms</module>
+        <module>sqx-common-mail</module>
+        <module>sqx-common-pay</module>
+        <module>sqx-common-doc</module>
+        <module>sqx-common-file</module>
+        <module>sqx-common-websocket</module>
+        <module>sqx-common-mybatis</module>
+        <module>sqx-common-web</module>
+        <module>sqx-common-shiro</module>
+    </modules>
+
+    <dependencies>
+        <!-- 配置文件自动映射 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+</project>

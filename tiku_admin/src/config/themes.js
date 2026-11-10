@@ -1,0 +1,40 @@
+/** 与 C 端 static/css/theme.scss 保持一致的品牌色 */
+export const themeList = [
+  {
+    id: 'client',
+    name: 'C端主题',
+    colors: {
+      brand: '#386df5',
+      brandDark: '#2851c4',
+      ink: '#243041',
+      muted: '#667085',
+      line: 'rgba(36, 48, 65, 0.08)',
+      pageBg: '#f5f7fb',
+      bodyGradient: 'linear-gradient(180deg, #f8faff 0%, #eef2f6 100%)',
+      bodyGlowA: 'rgba(56, 109, 245, 0.12)',
+      bodyGlowB: 'rgba(37, 87, 214, 0.08)',
+      frameBg: 'rgba(255, 255, 255, 0.84)',
+      asideBg: 'linear-gradient(180deg, #f8faff 0%, #f2f5f8 100%)',
+      headerBg: 'rgba(255, 255, 255, 0.66)',
+      loginGradient: 'linear-gradient(140deg, #eef4ff 0%, #e6edf5 100%)',
+      loginGlowA: 'rgba(56, 109, 245, 0.16)',
+      loginGlowB: 'rgba(28, 51, 84, 0.12)',
+      cardBg: 'rgba(255, 255, 255, 0.78)',
+      tabBorder: '#eaecf0',
+      tabText: '#667085',
+      tabHoverBorder: '#d0d5dd',
+      tabHoverBg: 'rgba(248, 250, 252, 0.92)',
+      tabHoverText: '#344054',
+      tabActiveBorder: 'rgba(56, 109, 245, 0.2)',
+      tabActiveBg: '#ffffff',
+      tabActiveShadow: 'inset 0 0 0 1px rgba(56, 109, 245, 0.06), 0 4px 14px rgba(15, 23, 36, 0.04)',
+      menuHoverBg: 'rgba(56, 109, 245, 0.08)',
+      menuActiveBg: 'rgba(56, 109, 245, 0.14)',
+      submenuBg: 'rgba(255, 255, 255, 0.4)',
+      logoGradient: 'linear-gradient(145deg, #386df5 0%, #6b93f8 100%)',
+      scrollHoverBg: 'rgba(238, 244, 255, 0.92)',
+    },
+  },
+]
+
+export const defaultThemeId = 'client'

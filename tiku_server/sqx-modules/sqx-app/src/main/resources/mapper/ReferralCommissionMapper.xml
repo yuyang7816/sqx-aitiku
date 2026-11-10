@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.app.referral.commission.db.mapper.ReferralCommissionMapper">
+
+    <!-- 累计订单佣金收益（仅统计 type=1 订单佣金且 direction=1 入账） -->
+    <select id="sumUserCommission" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(amount), 0)
+        FROM referral_commission
+        WHERE user_id = #{userId}
+          AND type = 1
+          AND direction = 1
+    </select>
+
+    <!-- 指定时间范围内的订单佣金收益 -->
+    <select id="sumAmount" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(amount), 0)
+        FROM referral_commission
+        WHERE user_id = #{userId}
+          AND type = 1
+          AND direction = 1
+          AND create_time &gt;= #{startTime}
+          AND create_time &lt;= #{endTime}
+    </select>
+
+    <!-- 收益奖励列表（分页） -->
+    <select id="referralList" resultType="com.sqx.app.referral.commission.domain.vo.ReferralListVo">
+        SELECT rc.title   AS userName,
+               rc.description AS avatar,
+               rc.amount  AS amount
+        FROM referral_commission rc
+        WHERE rc.user_id = #{userId}
+          AND rc.type = 1
+          AND rc.direction = 1
+        ORDER BY rc.create_time DESC
+    </select>
+
+    <!-- 指定下级用户贡献的分佣合计 -->
+    <select id="sumMemberCommission" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(rc.amount), 0)
+        FROM referral_commission rc
+                 INNER JOIN tb_vip_order vo ON rc.order_id = vo.id
+        WHERE rc.user_id = #{inviterUserId}
+          AND vo.user_id = #{memberUserId}
+          AND rc.type = 1
+          AND rc.direction = 1
+    </select>
+
+</mapper>

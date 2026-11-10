@@ -1,0 +1,28 @@
+// ../../../ideaproject/tiku_all_work/tiku_uniapp/vite.config.js
+import path from "path";
+import { fileURLToPath } from "url";
+import { defineConfig } from "file:///D:/ideaproject/tiku_all_work/tiku_uniapp/node_modules/vite/dist/node/index.js";
+import uniPlugin from "file:///D:/ideaproject/tiku_all_work/tiku_uniapp/node_modules/@dcloudio/vite-plugin-uni/dist/index.js";
+var __vite_injected_original_import_meta_url = "file:///D:/ideaproject/tiku_all_work/tiku_uniapp/vite.config.js";
+var __dirname = path.dirname(fileURLToPath(__vite_injected_original_import_meta_url));
+var uni = typeof uniPlugin === "function" ? uniPlugin : uniPlugin.default;
+var vite_config_default = defineConfig({
+  plugins: [uni()],
+  resolve: {
+    alias: {
+      // H5 按需编译 uview 子组件时部分 import 缺少 @/ 前缀，补全 uni_modules 解析
+      "uni_modules/uview-plus": path.resolve(__dirname, "uni_modules/uview-plus")
+    }
+  },
+  server: {
+    port: 5174,
+    strictPort: true,
+    hmr: {
+      overlay: false
+    }
+  }
+});
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiLi4vLi4vLi4vaWRlYXByb2plY3QvdGlrdV9hbGxfd29yay90aWt1X3VuaWFwcC92aXRlLmNvbmZpZy5qcyJdLAogICJzb3VyY2VzQ29udGVudCI6IFsiY29uc3QgX192aXRlX2luamVjdGVkX29yaWdpbmFsX2Rpcm5hbWUgPSBcIkQ6XFxcXGlkZWFwcm9qZWN0XFxcXHRpa3VfYWxsX3dvcmtcXFxcdGlrdV91bmlhcHBcIjtjb25zdCBfX3ZpdGVfaW5qZWN0ZWRfb3JpZ2luYWxfZmlsZW5hbWUgPSBcIkQ6XFxcXGlkZWFwcm9qZWN0XFxcXHRpa3VfYWxsX3dvcmtcXFxcdGlrdV91bmlhcHBcXFxcdml0ZS5jb25maWcuanNcIjtjb25zdCBfX3ZpdGVfaW5qZWN0ZWRfb3JpZ2luYWxfaW1wb3J0X21ldGFfdXJsID0gXCJmaWxlOi8vL0Q6L2lkZWFwcm9qZWN0L3Rpa3VfYWxsX3dvcmsvdGlrdV91bmlhcHAvdml0ZS5jb25maWcuanNcIjtpbXBvcnQgcGF0aCBmcm9tICdwYXRoJztcbmltcG9ydCB7IGZpbGVVUkxUb1BhdGggfSBmcm9tICd1cmwnO1xuaW1wb3J0IHsgZGVmaW5lQ29uZmlnIH0gZnJvbSAndml0ZSc7XG5pbXBvcnQgdW5pUGx1Z2luIGZyb20gJ0BkY2xvdWRpby92aXRlLXBsdWdpbi11bmknO1xuXG5jb25zdCBfX2Rpcm5hbWUgPSBwYXRoLmRpcm5hbWUoZmlsZVVSTFRvUGF0aChpbXBvcnQubWV0YS51cmwpKTtcbmNvbnN0IHVuaSA9IHR5cGVvZiB1bmlQbHVnaW4gPT09ICdmdW5jdGlvbicgPyB1bmlQbHVnaW4gOiB1bmlQbHVnaW4uZGVmYXVsdDtcblxuZXhwb3J0IGRlZmF1bHQgZGVmaW5lQ29uZmlnKHtcblx0cGx1Z2luczogW3VuaSgpXSxcblx0cmVzb2x2ZToge1xuXHRcdGFsaWFzOiB7XG5cdFx0XHQvLyBINSBcdTYzMDlcdTk3MDBcdTdGMTZcdThCRDEgdXZpZXcgXHU1QjUwXHU3RUM0XHU0RUY2XHU2NUY2XHU5MEU4XHU1MjA2IGltcG9ydCBcdTdGM0FcdTVDMTEgQC8gXHU1MjREXHU3RjAwXHVGRjBDXHU4ODY1XHU1MTY4IHVuaV9tb2R1bGVzIFx1ODlFM1x1Njc5MFxuXHRcdFx0J3VuaV9tb2R1bGVzL3V2aWV3LXBsdXMnOiBwYXRoLnJlc29sdmUoX19kaXJuYW1lLCAndW5pX21vZHVsZXMvdXZpZXctcGx1cycpXG5cdFx0fVxuXHR9LFxuXHRzZXJ2ZXI6IHtcblx0XHRwb3J0OiA1MTc0LFxuXHRcdHN0cmljdFBvcnQ6IHRydWUsXG5cdFx0aG1yOiB7XG5cdFx0XHRvdmVybGF5OiBmYWxzZVxuXHRcdH1cblx0fVxufSk7XG4iXSwKICAibWFwcGluZ3MiOiAiO0FBQWtULE9BQU8sVUFBVTtBQUNuVSxTQUFTLHFCQUFxQjtBQUM5QixTQUFTLG9CQUFvQjtBQUM3QixPQUFPLGVBQWU7QUFIeUssSUFBTSwyQ0FBMkM7QUFLaFAsSUFBTSxZQUFZLEtBQUssUUFBUSxjQUFjLHdDQUFlLENBQUM7QUFDN0QsSUFBTSxNQUFNLE9BQU8sY0FBYyxhQUFhLFlBQVksVUFBVTtBQUVwRSxJQUFPLHNCQUFRLGFBQWE7QUFBQSxFQUMzQixTQUFTLENBQUMsSUFBSSxDQUFDO0FBQUEsRUFDZixTQUFTO0FBQUEsSUFDUixPQUFPO0FBQUE7QUFBQSxNQUVOLDBCQUEwQixLQUFLLFFBQVEsV0FBVyx3QkFBd0I7QUFBQSxJQUMzRTtBQUFBLEVBQ0Q7QUFBQSxFQUNBLFFBQVE7QUFBQSxJQUNQLE1BQU07QUFBQSxJQUNOLFlBQVk7QUFBQSxJQUNaLEtBQUs7QUFBQSxNQUNKLFNBQVM7QUFBQSxJQUNWO0FBQUEsRUFDRDtBQUNELENBQUM7IiwKICAibmFtZXMiOiBbXQp9Cg==

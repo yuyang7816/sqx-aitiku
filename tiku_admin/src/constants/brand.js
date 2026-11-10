@@ -1,0 +1,5 @@
+export const BRAND_NAME = 'AI题库'
+export const BRAND_ADMIN_TITLE = 'AI题库管理后台'
+export const BRAND_ADMIN_SUFFIX = 'AI题库管理台'
+export const BRAND_COMPANY = '西安省钱兄网络科技有限公司'
+export const BRAND_LOGO_TEXT = 'AI'

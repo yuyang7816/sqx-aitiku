@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.app.wallet.transaction.db.mapper.UserWalletTransactionMapper">
+
+    <!-- 累计有效收入：收入方向且状态为待处理/已完成 -->
+    <select id="sumTotalIncome" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(amount), 0)
+        FROM user_wallet_transaction
+        WHERE user_id = #{userId}
+          AND direction = 1
+          AND status IN (1, 2)
+    </select>
+
+    <!-- 待结算收入：收入方向且状态为待处理 -->
+    <select id="sumPendingIncome" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(amount), 0)
+        FROM user_wallet_transaction
+        WHERE user_id = #{userId}
+          AND direction = 1
+          AND status = 1
+    </select>
+
+</mapper>

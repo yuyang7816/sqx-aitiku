@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.sqx</groupId>
+        <artifactId>sqx-modules</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>sqx-system</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sqx</groupId>
+            <artifactId>sqx-common-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sqx</groupId>
+            <artifactId>sqx-common-doc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sqx</groupId>
+            <artifactId>sqx-common-shiro</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sqx</groupId>
+            <artifactId>sqx-common-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sqx</groupId>
+            <artifactId>sqx-common-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sqx</groupId>
+            <artifactId>sqx-common-mybatis</artifactId>
+        </dependency>
+    </dependencies>
+</project>

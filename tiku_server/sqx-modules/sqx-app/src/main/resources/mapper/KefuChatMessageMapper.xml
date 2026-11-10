@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.app.base.kefuChat.db.mapper.KefuChatMessageMapper">
+
+    <select id="listSessions" resultType="com.sqx.app.base.kefuChat.domain.vo.KefuChatSessionVO">
+        SELECT
+            m.user_id AS userId,
+            IFNULL(u.user_name, CONCAT('用户', m.user_id)) AS userName,
+            IFNULL(u.phone, '') AS phone,
+            SUBSTRING(m.content, 1, 80) AS lastContent,
+            DATE_FORMAT(m.create_time, '%Y-%m-%d %H:%i') AS lastTime,
+            IFNULL(unread.unread_count, 0) AS unreadCount
+        FROM kefu_chat_message m
+        INNER JOIN (
+            SELECT user_id, MAX(id) AS max_id
+            FROM kefu_chat_message
+            GROUP BY user_id
+        ) latest ON m.id = latest.max_id
+        LEFT JOIN tb_user u ON u.user_id = m.user_id
+        LEFT JOIN (
+            SELECT user_id, COUNT(1) AS unread_count
+            FROM kefu_chat_message
+            WHERE sender_role = 'user' AND is_read = 0
+            GROUP BY user_id
+        ) unread ON unread.user_id = m.user_id
+        ORDER BY m.create_time DESC
+        LIMIT #{limit}
+    </select>
+
+</mapper>

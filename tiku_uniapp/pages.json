@@ -1,0 +1,367 @@
+{
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^app-(.*)": "@/components/app-$1/app-$1.vue",
+			"^u--(.*)": "@/uni_modules/uview-plus/components/u-$1/u-$1.vue",
+			"^up-(.*)": "@/uni_modules/uview-plus/components/u-$1/u-$1.vue",
+			"^u-([^-].*)": "@/uni_modules/uview-plus/components/u-$1/u-$1.vue"
+		}
+	},
+	"pages": [{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/practice/practice",
+			"style": {
+				"navigationBarTitleText": "刷题中心"
+			}
+		},
+		{
+			"path": "pages/ai/ai",
+			"style": {
+				"navigationBarTitleText": "AI学习"
+			}
+		},
+		{
+			"path": "pages/notebook/notebook",
+			"style": {
+				"navigationBarTitleText": "错题本"
+			}
+		},
+		{
+			"path": "pages/my/my",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		}
+	],
+	"subPackages": [{
+			"root": "package/auth",
+			"name": "auth",
+			"pages": [{
+					"path": "login",
+					"style": {
+						"navigationBarTitleText": "登录"
+					}
+				}, {
+					"path": "account-login",
+					"style": {
+						"navigationBarTitleText": "账号登录"
+					}
+				}, {
+					"path": "register",
+					"style": {
+						"navigationBarTitleText": "注册"
+					}
+				}, {
+					"path": "forgot-password",
+					"style": {
+						"navigationBarTitleText": "找回密码"
+					}
+				}]
+		},
+		{
+			"root": "package/setup",
+			"name": "setup",
+			"pages": [{
+				"path": "plan",
+				"style": {
+					"navigationBarTitleText": "学习计划"
+				}
+			}]
+		},
+		{
+			"root": "package/question",
+			"name": "question",
+			"pages": [				{
+					"path": "answer",
+					"style": {
+						"navigationBarTitleText": "答题"
+					}
+				},
+				{
+					"path": "answer-sheet",
+					"style": {
+						"navigationBarTitleText": "答题卡"
+					}
+				},
+				{
+					"path": "result",
+					"style": {
+						"navigationBarTitleText": "练习结果"
+					}
+				},
+				{
+					"path": "analysis",
+					"style": {
+						"navigationBarTitleText": "题目解析"
+					}
+				},
+				{
+					"path": "video-analysis",
+					"style": {
+						"navigationBarTitleText": "高清视频解析"
+					}
+				},
+				{
+					"path": "ocr-result",
+					"style": {
+						"navigationBarTitleText": "拍照搜题"
+					}
+				},
+				{
+					"path": "search",
+					"style": {
+						"navigationBarTitleText": "找题"
+					}
+				}
+			]
+		},
+		{
+			"root": "package/practice",
+			"name": "practice",
+			"pages": [{
+				"path": "chapter",
+				"style": {
+					"navigationBarTitleText": "章节练习"
+				}
+			}, {
+				"path": "knowledge",
+				"style": {
+					"navigationBarTitleText": "知识点练习"
+				}
+			}, {
+				"path": "paper-center",
+				"style": {
+					"navigationBarTitleText": "试卷中心"
+				}
+			}]
+		},
+		{
+			"root": "package/analysis",
+			"name": "analysis",
+			"pages": [{
+					"path": "detail",
+					"style": {
+						"navigationBarTitleText": "我的学情分析"
+					}
+				},
+				{
+					"path": "report",
+					"style": {
+						"navigationBarTitleText": "学习报告"
+					}
+				},
+				{
+					"path": "report-history",
+					"style": {
+						"navigationBarTitleText": "历史学习报告"
+					}
+				},
+				{
+					"path": "calendar",
+					"style": {
+						"navigationBarTitleText": "学习日历"
+					}
+				}
+			]
+		},
+		{
+			"root": "package/member",
+			"name": "member",
+			"pages": [{
+					"path": "center",
+					"style": {
+						"navigationBarTitleText": "会员中心"
+					}
+				},
+				{
+					"path": "pay",
+					"style": {
+						"navigationBarTitleText": "确认订单"
+					}
+				},
+				{
+					"path": "success",
+					"style": {
+						"navigationBarTitleText": "开通成功"
+					}
+				},
+				{
+					"path": "order-list",
+					"style": {
+						"navigationBarTitleText": "会员订单"
+					}
+				}
+			]
+		},
+		{
+			"root": "package/promo",
+			"name": "promo",
+			"pages": [{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "推广中心"
+					}
+				},
+				{
+					"path": "withdraw",
+					"style": {
+						"navigationBarTitleText": "提现"
+					}
+				},
+				{
+					"path": "withdraw-account",
+					"style": {
+						"navigationBarTitleText": "提现账户"
+					}
+				},
+				{
+					"path": "detail",
+					"style": {
+						"navigationBarTitleText": "收益明细"
+					}
+				},
+				{
+					"path": "invite-list",
+					"style": {
+						"navigationBarTitleText": "邀请详情"
+					}
+				},
+				{
+					"path": "withdraw-records",
+					"style": {
+						"navigationBarTitleText": "提现记录"
+					}
+				}
+			]
+		},
+		{
+			"root": "package/customer",
+			"name": "customer",
+			"pages": [{
+					"path": "kefu-chat",
+					"style": {
+						"navigationBarTitleText": "在线客服"
+					}
+				},
+				{
+					"path": "wechat",
+					"style": {
+						"navigationBarTitleText": "微信客服"
+					}
+				}
+			]
+		},
+		{
+			"root": "package/ai",
+			"name": "ai",
+			"pages": [{
+				"path": "chat",
+				"style": {
+					"navigationBarTitleText": "AI 答疑"
+				}
+			}]
+		},
+		{
+			"root": "package/common",
+			"name": "common",
+			"pages": [{
+					"path": "notice",
+					"style": {
+						"navigationBarTitleText": "消息中心"
+					}
+				},
+				{
+					"path": "poster",
+					"style": {
+						"navigationBarTitleText": "分享海报"
+					}
+				},
+				{
+					"path": "article",
+					"style": {
+						"navigationBarTitleText": "详情"
+					}
+				},
+				{
+					"path": "notebook-export",
+					"style": {
+						"navigationBarTitleText": "导出错题"
+					}
+				}
+			]
+		},
+		{
+			"root": "package/profile",
+			"name": "profile",
+			"pages": [{
+					"path": "settings",
+					"style": {
+						"navigationBarTitleText": "设置"
+					}
+				},
+				{
+					"path": "collection",
+					"style": {
+						"navigationBarTitleText": "我的收藏"
+					}
+				},
+				{
+					"path": "help-feedback",
+					"style": {
+						"navigationBarTitleText": "帮助与反馈"
+					}
+				},
+				{
+					"path": "edit",
+					"style": {
+						"navigationBarTitleText": "用户信息"
+					}
+				},
+				{
+					"path": "badges",
+					"style": {
+						"navigationBarTitleText": "勋章墙"
+					}
+				}
+			]
+		}
+	],
+	"preloadRule": {
+		"pages/index/index": {
+			"network": "all",
+			"packages": ["auth", "setup", "question", "practice", "member", "common"]
+		},
+		"pages/practice/practice": {
+			"network": "all",
+			"packages": ["question", "practice"]
+		},
+		"pages/my/my": {
+			"network": "all",
+			"packages": ["member", "profile", "promo"]
+		},
+		"pages/ai/ai": {
+			"network": "all",
+			"packages": ["ai", "question"]
+		},
+		"pages/notebook/notebook": {
+			"network": "all",
+			"packages": ["question", "analysis"]
+		}
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "AI题库",
+		"navigationBarBackgroundColor": "#ffffff",
+		"backgroundColor": "#ffffff",
+		"h5": {
+			"navigationStyle": "custom"
+		}
+	},
+	"uniIdRouter": {}
+}

@@ -1,0 +1,100 @@
+package ${package.Parent}.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ${package.Parent}.domain.vo.${entity}Vo;
+#if(${generateService})
+import ${package.Service}.${table.serviceName};
+#end
+import ${package.Parent}.domain.bo.${entity}InfoBo;
+import ${package.Parent}.domain.bo.${entity}PageBo;
+import ${package.Parent}.domain.bo.${entity}SaveBo;
+import ${package.Parent}.domain.bo.${entity}UpdateBo;
+import ${package.Entity}.${entity};
+import ${package.Parent}.service.${entity}Service;
+import com.sqx.common.core.exception.BizException;
+import com.sqx.common.mybatis.utils.PageUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+/**
+ * $!{table.comment} 服务实现类
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+#if(${kotlin})
+open class ${entity}Service : ${superServiceImplClass}<${table.mapperName}, ${entity}>()#if(${generateService}), ${table.serviceName}#end {
+
+}
+#else
+public class ${entity}ServiceImpl implements ${entity}Service {
+
+    @Resource
+    private ${table.serviceName} i${entity}Service;
+
+    @Override
+    public void saveInfo(${entity}SaveBo ${table.entityPath}SaveBo) {
+        ${entity} ${table.entityPath} = new ${entity}();
+        BeanUtils.copyProperties(${table.entityPath}SaveBo, ${table.entityPath});
+
+        i${entity}Service.save(${table.entityPath});
+    }
+
+    @Override
+    public IPage<${entity}Vo> pageInfo(${entity}PageBo ${table.entityPath}PageBo) {
+        Page<${entity}> initPage = PageUtil.initPage(${table.entityPath}PageBo.getPage(), ${table.entityPath}PageBo.getLimit());
+
+        QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .orderByDesc(${entity}::getCreateTime);
+
+        IPage<${entity}> iPage = i${entity}Service.page(initPage, queryWrapper);
+        List<${entity}Vo> voList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(iPage.getRecords())) {
+            for (${entity} record : iPage.getRecords()) {
+                ${entity}Vo vo = new ${entity}Vo();
+                BeanUtils.copyProperties(record, vo);
+
+                voList.add(vo);
+            }
+        }
+
+        IPage<${entity}Vo> voIPage = PageUtil.copyPage(iPage, voList);
+        return voIPage;
+    }
+
+    @Override
+    public ${entity}Vo info(${entity}InfoBo ${table.entityPath}InfoBo) {
+        ${entity} ${table.entityPath} = i${entity}Service.getById(${table.entityPath}InfoBo.getId());
+        if (Objects.isNull(${table.entityPath})) {
+            throw new BizException("信息不存在");
+        }
+
+        ${entity}Vo vo = new ${entity}Vo();
+        BeanUtils.copyProperties(${table.entityPath}, vo);
+        return vo;
+    }
+
+    @Override
+    public void updateInfo(${entity}UpdateBo ${table.entityPath}UpdateBo) {
+        ${entity} ${table.entityPath} = new ${entity}();
+        BeanUtils.copyProperties(${table.entityPath}UpdateBo, ${table.entityPath});
+
+        i${entity}Service.updateById(${table.entityPath});
+    }
+
+    @Override
+    public void delete(${entity}InfoBo ${table.entityPath}InfoBo) {
+        i${entity}Service.removeById(${table.entityPath}InfoBo.getId());
+    }
+}
+#end

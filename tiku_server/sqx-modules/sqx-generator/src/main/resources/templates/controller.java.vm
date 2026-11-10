@@ -1,0 +1,108 @@
+package ${package.Controller};
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import ${package.Parent}.domain.vo.${entity}Vo;
+import ${package.Parent}.domain.bo.${entity}InfoBo;
+import ${package.Parent}.domain.bo.${entity}PageBo;
+import ${package.Parent}.domain.bo.${entity}SaveBo;
+import ${package.Parent}.domain.bo.${entity}UpdateBo;
+import ${package.Parent}.service.${entity}Service;
+import com.sqx.common.core.domain.Result;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+import javax.annotation.Resource;
+
+/**
+ * $!{table.comment} 前端控制器
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Tag(name = "管理端-$!{table.comment}", description = "管理端-$!{table.comment}")
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("/admin/${table.entityPath}")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+
+    @Resource
+    private ${entity}Service ${table.entityPath}Service;
+
+    /**
+     * 保存
+     */
+    @Operation(summary = "保存")
+    @PostMapping("save")
+    public Result<Void> save(@RequestBody @Validated ${entity}SaveBo ${table.entityPath}SaveBo) {
+        ${table.entityPath}Service.saveInfo(${table.entityPath}SaveBo);
+        return Result.success();
+    }
+
+    /**
+     * 列表
+     */
+    @Operation(summary = "列表")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = ${entity}Vo.class)))
+    @PostMapping("page")
+    public Result<IPage<${entity}Vo>> page(@RequestBody @Validated ${entity}PageBo ${table.entityPath}PageBo) {
+        IPage<${entity}Vo> voIPage = ${table.entityPath}Service.pageInfo(${table.entityPath}PageBo);
+        return Result.success(voIPage);
+    }
+
+    /**
+     * 信息
+     */
+    @Operation(summary = "信息")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = ${entity}Vo.class)))
+    @PostMapping("info")
+    public Result<${entity}Vo> info(@RequestBody @Validated ${entity}InfoBo ${table.entityPath}InfoBo) {
+        ${entity}Vo vo = ${table.entityPath}Service.info(${table.entityPath}InfoBo);
+        return Result.success(vo);
+    }
+
+    /**
+     * 更新
+     */
+    @Operation(summary = "更新")
+    @PostMapping("update")
+    public Result<Void> update(@RequestBody @Validated ${entity}UpdateBo ${table.entityPath}UpdateBo) {
+        ${table.entityPath}Service.updateInfo(${table.entityPath}UpdateBo);
+        return Result.success();
+    }
+
+    /**
+     * 删除
+     */
+    @Operation(summary = "删除")
+    @PostMapping("delete")
+    public Result<Void> delete(@RequestBody @Validated ${entity}InfoBo ${table.entityPath}InfoBo) {
+        ${table.entityPath}Service.delete(${table.entityPath}InfoBo);
+        return Result.success();
+    }
+}
+#end

@@ -1,0 +1,280 @@
+<template>
+	<view class="login-page">
+		<view class="page-bg-grid"></view>
+		<view class="page-bg-radial page-bg-radial-a"></view>
+		<view class="page-bg-radial page-bg-radial-b"></view>
+		<view class="hero-wave hero-wave-a"></view>
+		<view class="hero-wave hero-wave-b"></view>
+		<view class="hero-section">
+			<view class="hero-content">
+				<view class="hero-brand-row">
+					<view class="hero-brand-mark">
+						<up-icon name="kefu-ermai" size="28" color="#FFFFFF"></up-icon>
+					</view>
+					<view class="hero-brand-copy">
+						<text class="hero-brand-name">AI智能提分</text>
+						<text class="hero-brand-sub">中学练习与学情辅助平台</text>
+					</view>
+				</view>
+				<view class="hero-main-copy">
+					<text class="hero-title">账号登录</text>
+					<text class="hero-subtitle">同步学习记录、错题本和会员权益</text>
+				</view>
+				<view class="learning-scene">
+					<view class="scene-chip scene-chip-a">
+						<up-icon name="checkmark-circle-fill" size="16" color="#22c55e"></up-icon>
+						<text>安全登录</text>
+					</view>
+					<view class="question-preview">
+						<view class="preview-top">
+							<view class="preview-badge">
+								<up-icon name="grid-fill" size="15" color="#2457d6"></up-icon>
+								<text>账号中心</text>
+							</view>
+						</view>
+						<text class="preview-question">支持手机号或账号登录，自动同步学习记录、错题本和会员权益。</text>
+						<view class="preview-bars">
+							<view class="preview-bar preview-bar-main"></view>
+							<view class="preview-bar preview-bar-sub"></view>
+							<view class="preview-bar preview-bar-sub short"></view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+
+		<view class="auth-section">
+			<view class="section-head">
+				<text class="section-title" style="text-align: center;">账号密码登录</text>
+				<text class="section-subtitle" style="text-align: center;">请输入账号和密码完成登录</text>
+			</view>
+
+			<view v-if="accountAlert" class="account-alert">
+				<up-icon name="error-circle-fill" size="18" color="#ff4d4f"></up-icon>
+				<text class="account-alert-text">{{ accountAlert }}</text>
+			</view>
+
+			<view class="field-group">
+				<text class="field-label">账号</text>
+				<view class="field-pill" :class="{ 'field-focus': accountFocus, 'field-error': accountHint }">
+					<up-icon name="account-fill" size="20" color="#386df5"></up-icon>
+					<input :value="account" class="field-input" maxlength="32" placeholder="请输入手机号或账号"
+						placeholder-class="placeholder" @input="onAccountInput" @focus="accountFocus = true"
+						@blur="accountFocus = false" />
+				</view>
+				<text v-if="accountHint" class="field-hint">{{ accountHint }}</text>
+			</view>
+
+			<view class="field-group">
+				<text class="field-label">密码</text>
+				<view class="field-pill" :class="{ 'field-focus': passwordFocus, 'field-error': passwordHint }">
+					<up-icon name="lock-fill" size="20" color="#386df5"></up-icon>
+					<input :value="password" class="field-input" password maxlength="20" placeholder="请输入登录密码"
+						placeholder-class="placeholder" @input="onPasswordInput" @focus="passwordFocus = true"
+						@blur="passwordFocus = false" />
+				</view>
+				<text v-if="passwordHint" class="field-hint">{{ passwordHint }}</text>
+			</view>
+
+			<view class="login-btn" :class="{ disabled: !canLogin }" @tap="submitLogin">
+				<up-loading-icon v-if="loggingIn" mode="circle" color="#FFFFFF" size="20"></up-loading-icon>
+				<text v-else>登录账号</text>
+			</view>
+
+			<view class="auth-switch-row">
+				<text class="auth-switch-link" @tap="goToForgotPassword">忘记密码</text>
+				<text class="auth-switch-link" @tap="goToRegister">去注册</text>
+			</view>
+
+			<view class="agreement-links agreement-check-row" @tap="agreed = !agreed">
+				<view class="agree-dot" :class="{ active: agreed }">
+					<up-icon v-if="agreed" name="checkmark" size="12" color="#FFFFFF"></up-icon>
+				</view>
+				<text>已阅读并同意</text>
+				<text class="link" hover-class="link-hover" @tap.stop="openAgreement">《用户协议》</text>
+				<text> 和 </text>
+				<text class="link" hover-class="link-hover" @tap.stop="openPrivacy">《隐私政策》</text>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script setup>
+	import { computed, ref } from 'vue';
+	import { AGREEMENT_PAGE, PRIVACY_PAGE } from '@/common/routes';
+	import { AGREEMENT_TIP } from '@/common/login-rules';
+	import {
+		finishAuthNavigation,
+		loginByPhonePassword
+	} from '@/common/auth-api';
+	import {
+		applyLoginErrorFeedback,
+		parseNetworkError
+	} from '@/common/login-error';
+
+	const PHONE_REGEX = /^1\d{10}$/;
+
+	const account = ref('');
+	const password = ref('');
+	const agreed = ref(false);
+	const loggingIn = ref(false);
+	const accountFocus = ref(false);
+	const passwordFocus = ref(false);
+	const accountAlert = ref('');
+
+	const accountValid = computed(() => PHONE_REGEX.test(account.value.trim()));
+	const accountHint = computed(() => {
+		if (!account.value || accountValid.value) return '';
+		if (/^\d+$/.test(account.value.trim()) && account.value.trim().length < 11) {
+			return '请输入11位手机号';
+		}
+		if (/^\d+$/.test(account.value.trim())) {
+			return '请输入以1开头的11位手机号';
+		}
+		return '请使用注册手机号登录';
+	});
+	const passwordHint = computed(() => {
+		if (!password.value) return '';
+		return password.value.length >= 6 ? '' : '密码至少6位';
+	});
+	const canLogin = computed(() => accountValid.value && password.value.length >= 6 && agreed.value && !loggingIn.value);
+
+	const clearApiErrorState = () => {
+		accountAlert.value = '';
+	};
+
+	const showErrorToast = (title) => {
+		uni.showToast({ title, icon: 'none' });
+	};
+
+	const onAccountInput = (event) => {
+		const raw = String(event.detail?.value || '').trim();
+		account.value = /^\d+$/.test(raw)
+			? raw.replace(/\D/g, '').slice(0, 11)
+			: raw.slice(0, 32);
+		clearApiErrorState();
+	};
+	const onPasswordInput = (event) => {
+		password.value = String(event.detail?.value || '').slice(0, 20);
+		clearApiErrorState();
+	};
+	const openArticle = (url) => {
+		uni.navigateTo({ url });
+	};
+	const openAgreement = () => openArticle(AGREEMENT_PAGE);
+	const openPrivacy = () => openArticle(PRIVACY_PAGE);
+	const goToRegister = () => openArticle('/package/auth/register');
+	const goToForgotPassword = () => openArticle('/package/auth/forgot-password');
+
+	const submitLogin = async () => {
+		if (loggingIn.value) return;
+		if (!accountValid.value) {
+			showErrorToast(account.value.trim() ? '请输入正确手机号' : '请输入账号');
+			return;
+		}
+		if (password.value.length < 6) {
+			showErrorToast('请输入至少6位密码');
+			return;
+		}
+		if (!agreed.value) {
+			showErrorToast(AGREEMENT_TIP);
+			return;
+		}
+		loggingIn.value = true;
+		clearApiErrorState();
+		try {
+			await loginByPhonePassword({
+				phoneNo: account.value.trim(),
+				password: password.value,
+				agreedProtocol: agreed.value
+			});
+			finishAuthNavigation();
+		} catch (e) {
+			if (e?.loginError) {
+				applyLoginErrorFeedback(e.loginError, {
+					setAccountAlert: (msg) => {
+						accountAlert.value = msg;
+					},
+					showToast: showErrorToast
+				});
+			} else {
+				showErrorToast(e?.message || parseNetworkError().message);
+			}
+		} finally {
+			loggingIn.value = false;
+		}
+	};
+</script>
+
+<style lang="scss" scoped>
+	.login-page {
+		min-height: 100vh;
+		height: 100vh;
+		background:
+			radial-gradient(circle at 18% 14%, rgba(67, 214, 151, 0.22) 0, rgba(67, 214, 151, 0) 18%),
+			radial-gradient(circle at 86% 22%, rgba(110, 168, 255, 0.28) 0, rgba(110, 168, 255, 0) 20%),
+			linear-gradient(180deg, #0f265c 0%, #16377e 22%, #254f9f 36%, #dce8fb 60%, #eef4fd 78%, #f7f9fd 100%);
+		position: relative;
+		padding-bottom: calc(18rpx + env(safe-area-inset-bottom));
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+	.page-bg-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1rpx, transparent 1rpx), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1rpx, transparent 1rpx); background-size: 32rpx 32rpx; pointer-events: none; }
+	.hero-wave { position: absolute; left: -10%; width: 120%; border-radius: 50%; pointer-events: none; }
+	.hero-wave-a { height: 260rpx; top: 340rpx; background: rgba(255, 255, 255, 0.05); transform: rotate(-6deg); }
+	.hero-wave-b { height: 180rpx; top: 404rpx; background: rgba(255, 255, 255, 0.08); transform: rotate(4deg); }
+	.page-bg-radial { position: absolute; border-radius: 50%; filter: blur(90rpx); pointer-events: none; }
+	.page-bg-radial-a { width: 320rpx; height: 320rpx; top: 180rpx; right: -100rpx; background: rgba(34, 197, 94, 0.12); }
+	.page-bg-radial-b { width: 280rpx; height: 280rpx; top: 420rpx; left: -90rpx; background: rgba(245, 158, 11, 0.1); }
+	.hero-section { position: relative; padding-bottom: 18rpx; }
+	.hero-content { padding: 8rpx 32rpx 0; position: relative; z-index: 1; }
+	.hero-brand-row { display: flex; align-items: center; gap: 18rpx; }
+	.hero-brand-mark { width: 72rpx; height: 72rpx; border-radius: 20rpx; background: rgba(255, 255, 255, 0.16); box-shadow: inset 0 0 0 2rpx rgba(255, 255, 255, 0.06); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(12rpx); }
+	.hero-brand-copy { min-width: 0; display: flex; flex-direction: column; gap: 6rpx; }
+	.hero-brand-name { font-size: 30rpx; font-weight: 700; color: #ffffff; }
+	.hero-brand-sub { font-size: 22rpx; color: rgba(255, 255, 255, 0.72); }
+	.hero-main-copy { margin-top: 18rpx; }
+	.hero-title { display: block; font-size: 44rpx; line-height: 1.08; font-weight: 800; color: #ffffff; }
+	.hero-subtitle { display: block; margin-top: 10rpx; font-size: 22rpx; line-height: 1.45; color: rgba(255, 255, 255, 0.78); }
+	.learning-scene { margin-top: 0; height: 88rpx; position: relative; opacity: 0.14; pointer-events: none; }
+	.scene-chip, .question-preview { position: absolute; }
+	.scene-chip { padding: 6rpx 10rpx; border-radius: 16rpx; background: rgba(255, 255, 255, 0.9); box-shadow: 0 8rpx 18rpx rgba(8, 18, 45, 0.1); display: flex; align-items: center; gap: 6rpx; font-size: 16rpx; font-weight: 600; color: #344054; }
+	.scene-chip-a { top: 10rpx; left: 14rpx; }
+	.question-preview { left: 142rpx; right: 96rpx; top: 10rpx; padding: 14rpx; border-radius: 20rpx; background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(243, 247, 255, 0.98) 100%); box-shadow: 0 12rpx 24rpx rgba(7, 19, 47, 0.12); transform: rotate(-6deg) scale(0.74); transform-origin: top center; }
+	.preview-top { display: flex; align-items: center; justify-content: space-between; gap: 16rpx; }
+	.preview-badge { display: inline-flex; align-items: center; gap: 8rpx; padding: 8rpx 14rpx; border-radius: 999rpx; background: #eef4ff; font-size: 20rpx; font-weight: 700; color: #2457d6; }
+	.preview-question { display: block; margin-top: 8rpx; font-size: 18rpx; line-height: 1.4; font-weight: 700; color: #101828; }
+	.preview-bars { margin-top: 8rpx; display: flex; flex-direction: column; gap: 6rpx; }
+	.preview-bar { height: 8rpx; border-radius: 999rpx; background: #dce7fb; }
+	.preview-bar-main { width: 100%; background: linear-gradient(90deg, #2457d6 0%, #4f86ff 100%); }
+	.preview-bar-sub { width: 78%; }
+	.preview-bar-sub.short { width: 52%; }
+	.auth-section { position: relative; z-index: 2; margin: 68rpx 24rpx 0; padding: 26rpx 24rpx 20rpx; background: #ffffff; border-radius: 28rpx; box-shadow: 0 18rpx 42rpx rgba(18, 31, 66, 0.1); }
+	.section-head { display: flex; flex-direction: column; gap: 6rpx; margin-bottom: 18rpx; }
+	.section-title { font-size: 32rpx; font-weight: 700; color: #101828; }
+	.section-subtitle { font-size: 22rpx; line-height: 1.45; color: #667085; }
+	.account-alert { margin-bottom: 16rpx; padding: 16rpx 18rpx; border-radius: 16rpx; background: #fff2f0; display: flex; align-items: flex-start; gap: 10rpx; }
+	.account-alert-text { flex: 1; font-size: 22rpx; line-height: 1.5; color: #ff4d4f; }
+	.field-group { margin-top: 16rpx; }
+	.field-group:first-of-type { margin-top: 0; }
+	.field-label { display: block; margin-bottom: 18rpx; font-size: 26rpx; font-weight: 600; color: #344054; }
+	.field-pill { height: 90rpx; border-radius: 16rpx; background: #f7f8fc; padding: 0 16rpx; display: flex; align-items: center; gap: 10rpx; box-shadow: inset 0 0 0 2rpx #edf1f7; transition: all 0.2s ease; }
+	.field-pill.field-focus { background: #ffffff; box-shadow: inset 0 0 0 2rpx rgba(56, 109, 245, 0.9), 0 8rpx 24rpx rgba(56, 109, 245, 0.08); }
+	.field-pill.field-error { background: #fff2f0; box-shadow: inset 0 0 0 2rpx rgba(255, 77, 79, 0.18); }
+	.field-input { flex: 1; height: 100%; font-size: 23rpx; color: #0f1b3d; caret-color: #386df5; font-weight: 500; }
+	.placeholder { color: #b7c0d1; font-weight: 400; }
+	.field-hint { display: block; margin-top: 6rpx; padding-left: 6rpx; font-size: 20rpx; color: #ff4d4f; }
+	.login-btn { margin-top: 72rpx; height: 90rpx; border-radius: 16rpx; background: linear-gradient(135deg, #2457d6 0%, #3c74f7 100%); color: #fff; font-size: 25rpx; font-weight: 700; display: flex; align-items: center; justify-content: center; letter-spacing: 1rpx; box-shadow: 0 14rpx 30rpx rgba(36, 87, 214, 0.22); }
+	.login-btn:active { transform: translateY(1rpx); }
+	.login-btn.disabled { background: #e5e7eb; box-shadow: none; color: #98a2b3; }
+	.auth-switch-row { margin-top: 18rpx; display: flex; align-items: center; justify-content: center; gap: 28rpx; }
+	.auth-switch-link { font-size: 22rpx; line-height: 1.5; color: #2457d6; font-weight: 600; }
+	.agreement-links { margin-top: 12rpx; font-size: 21rpx; line-height: 1.55; color: #98a2b3; text-align: center; }
+	.agreement-check-row { display: flex; align-items: flex-start; justify-content: center; gap: 10rpx; text-align: left; margin: 50rpx 0; }
+	.agree-dot { width: 32rpx; height: 32rpx; border-radius: 10rpx; background: #ffffff; box-shadow: inset 0 0 0 2rpx #d0d5dd; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1rpx; }
+	.agree-dot.active { background: #386df5; box-shadow: inset 0 0 0 2rpx #386df5; }
+	.link { color: #2457d6; font-weight: 600; }
+	.link-hover { opacity: 0.72; }
+	@media screen and (max-width: 375px) { .hero-title { font-size: 40rpx; } .hero-content { padding-left: 24rpx; padding-right: 24rpx; } .learning-scene { height: 70rpx; } .question-preview { left: 120rpx; right: 74rpx; } .auth-section { margin: 0 18rpx 0; padding: 22rpx 20rpx 18rpx; } }
+</style>
